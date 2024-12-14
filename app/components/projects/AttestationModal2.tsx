@@ -26,9 +26,9 @@ import {
 } from "@ethereum-attestation-service/eas-sdk";
 import { isAddress, zeroAddress } from "viem";
 import { useNormalAttestation } from "@/src/hooks/useNormalAttestation";
-import ReviewConfirmationPage from "../attestations/ReviewConfirmationPage";
-import Navbar from "../ui/Navbar";
-import Footer from "../ui/Footer";
+import { useAccount } from "wagmi";
+import useSWR from "swr";
+import { getFIDbyAddress } from "./actions";
 
 interface AttestationModalProps {
   isOpen: boolean;
@@ -47,6 +47,8 @@ const AttestationModal2: React.FC<AttestationModalProps> = ({
   project,
   className,
 }) => {
+  const { address } = useAccount();
+
   const [feedback, setFeedback] = useState("");
   const [feedback2, setFeedback2] = useState("");
   const [extrafeedback, setExtraFeedback] = useState("");
@@ -60,10 +62,20 @@ const AttestationModal2: React.FC<AttestationModalProps> = ({
 
   const { eas, currentAddress } = useEAS();
   const [user] = useLocalStorage("user", {
-    fid: "",
     username: "",
     ethAddress: "",
   });
+
+  const { data: fid = null } = useSWR(
+    address ? `fid.${address}` : null,
+    async ( ) => {
+      if (!address) return null;
+      const fid = await getFIDbyAddress(address);
+      return fid;
+    }
+  );
+
+  console.debug({ fid });
 
   const { uploadToPinata, isUploading } = usePinataUpload();
   // const { createDelegatedAttestation, isCreating: isCreatingDelegated } = useDelegatedAttestation();
@@ -102,7 +114,7 @@ const AttestationModal2: React.FC<AttestationModalProps> = ({
   };
 
   const createAttestation = async (pinataURL: string): Promise<string> => {
-    if (!user.fid) {
+    if (!fid) {
       throw alert("Please Connect to Farcaster to Continue");
     }
 
@@ -122,7 +134,7 @@ const AttestationModal2: React.FC<AttestationModalProps> = ({
         type: "bytes32",
         value: project?.primaryprojectuid || "",
       },
-      { name: "farcasterID", type: "uint256", value: user.fid },
+      { name: "farcasterID", type: "uint256", value: fid },
       { name: "issuer", type: "string", value: "MGL" },
       { name: "metadataurl", type: "string", value: pinataURL },
     ]);
@@ -211,7 +223,7 @@ const AttestationModal2: React.FC<AttestationModalProps> = ({
               website: project?.websiteUrl,
             },
             reviewer: {
-              userFID: user.fid,
+              userFID: fid,
               ethAddress: user.ethAddress || zeroAddress,
             },
             context: {
@@ -311,7 +323,7 @@ const AttestationModal2: React.FC<AttestationModalProps> = ({
       setIsLoading(false);
 
       const attestationData = {
-        userfid: user.fid,
+        userfid: fid,
         ethaddress: user.ethAddress || zeroAddress,
         projectName: contribution.projectName,
         contribution: contribution.contribution,
