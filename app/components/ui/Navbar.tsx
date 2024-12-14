@@ -7,7 +7,6 @@ import FarcasterLogin, { atomIsSignedIn } from "../login/FarcasterLogin2";
 import { isMobile } from "react-device-detect";
 import ReviewCarousel from "../attestations/ReviewCarousel";
 import useLocalStorage from "@/src/hooks/use-local-storage-state";
-import OnboardingCarousel from "../OnboardingCarousel";
 import { useAtom } from "jotai";
 
 interface UserLogin {
