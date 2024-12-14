@@ -21,7 +21,7 @@ export { useGlobalState };
 // Determine environment and set the correct URL
 const isProduction = process.env.NODE_ENV === "production";
 export const NEXT_PUBLIC_URL = isProduction
-  ? "https://www.metricsgarden.xyz/" // Production URL
+  ? "https://impact-garden-v2.vercel.app/" // Production URL
   : "http://localhost:3000"; // Local development URL
 
 export const WHITELISTED_USERS = [
