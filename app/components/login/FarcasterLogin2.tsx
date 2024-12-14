@@ -7,6 +7,7 @@ import { NEXT_PUBLIC_URL, useGlobalState } from "../../../src/config/config";
 import dotenv from "dotenv";
 import UserDropdown from "./userSignoutDropdown";
 import { atom, useAtom } from "jotai";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 dotenv.config();
 
@@ -157,38 +158,7 @@ const FarcasterLogin: React.FC<FarcasterLoginProps> = ({ onLoginSuccess }) => {
   }
 
   return (
-    <div className="bg-headerblack flex items-center">
-      {isSignedIn ? (
-        <>
-          <UserDropdown onSignout={handleSignout} />
-          {/* <div className="inline-block ml-4">
-            <ConnectButton
-              accountStatus="address"
-              chainStatus="icon"
-              showBalance={false}
-            />
-          </div> */}
-        </>
-      ) : (
-        <div
-          className="neynar_signin rounded-xl"
-          data-client_id={client_id}
-          data-success_callback="onSignInSuccess"
-          data-theme="light"
-          data-variant="farcaster"
-          data-logo_size="25px"
-          data-height="36px"
-          data-width="120px"
-          data-border_radius="10px"
-          data-font_size="16px"
-          data-font_weight="300"
-          data-padding="4px 15px"
-		  data-background_color="#F4D3C3"
-          data-margin="0"
-		 
-        />
-      )}
-    </div>
+  <ConnectButton/>
   );
 };
 
