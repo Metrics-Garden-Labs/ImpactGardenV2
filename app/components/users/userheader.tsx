@@ -16,6 +16,8 @@ import {
 import Image from "next/image";
 import { getUserBadgeStatus } from "@/src/utils/badges/badgeHelper";
 import { BadgeDisplay } from "@/app/components/ui/BadgeDisplay";
+import { isAddress } from "viem";
+import { beautifyAddress } from "@/src/lib/helpers";
 
 interface Props {
   user: User;
@@ -82,7 +84,9 @@ const UserHeader = async ({ user }: Props) => {
           </div>
           <div>
             <h1 className="text-3xl sm:text-4xl sm:pb-4 md:text-5xl font-bold text-lime-900 flex items-center">
-              {user.username}
+              {isAddress(user.username)
+                ? beautifyAddress(user.username)
+                : user.username}
               <div className="flex items-center justify-center scale-150 px-4 pt-1">
                 <BadgeDisplay
                   isCoinbaseVerified={isCoinbaseVerified}
