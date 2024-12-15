@@ -70,7 +70,7 @@ const AttestationModal2: React.FC<AttestationModalProps> = ({
     address ? `fid.${address}` : null,
     async ( ) => {
       if (!address) return null;
-      const fid = await getFIDbyAddress(address);
+      const fid = await getFIDbyAddress('0xB6594a5EdDA3E0D910Fb57db7a86350A9821327a');
       return fid;
     }
   );
