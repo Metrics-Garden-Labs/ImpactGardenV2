@@ -68,9 +68,9 @@ const AttestationModal2: React.FC<AttestationModalProps> = ({
 
   const { data: fid = null } = useSWR(
     address ? `fid.${address}` : null,
-    async ( ) => {
+    async () => {
       if (!address) return null;
-      const fid = await getFIDbyAddress('0xB6594a5EdDA3E0D910Fb57db7a86350A9821327a');
+      const fid = await getFIDbyAddress(address);
       return fid;
     }
   );
