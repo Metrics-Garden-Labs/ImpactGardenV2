@@ -18,6 +18,8 @@ import UserBadges, {
   useUserBadges,
   type BadgeDisplayProps,
 } from "../ui/UserBadges";
+import { isAddress } from "viem";
+import { beautifyAddress } from "@/src/lib/helpers";
 
 interface ContributionAttestationsProps {
   recentAttestations: AttestationDisplay[];
@@ -279,7 +281,9 @@ const ContributionAttestations: React.FC<ContributionAttestationsProps> = ({
                         <div className=" ">
                           <div className="flex items-center">
                             <h3 className="text-lg font-semibold">
-                              {attestation.username}
+                              {isAddress(attestation.username)
+                                ? beautifyAddress(attestation.username)
+                                : attestation.username}
                             </h3>
                             <UserBadges fid={attestation.userFid} />
                           </div>
