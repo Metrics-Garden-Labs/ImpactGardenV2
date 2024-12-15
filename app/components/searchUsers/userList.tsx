@@ -5,6 +5,8 @@ import Image from "next/image";
 import { getUserAddressesByFid } from "@/src/lib/db/dbusers";
 import { BadgeDisplay } from "@/app/components/ui/BadgeDisplay";
 import { getUserBadgeStatus } from "@/src/utils/badges/badgeHelper";
+import { isAddress } from "viem";
+import { beautifyAddress } from "@/src/lib/helpers";
 
 interface Props {
   users: User[];
@@ -98,7 +100,9 @@ export default async function UserList({
                 )}
               </div>
               <h3 className="mb-2 text-xl flex items-center ">
-                {user.username}
+			  {isAddress(user.username)
+                ? beautifyAddress(user.username)
+                : user.username}
                 <BadgeDisplay
                   isCoinbaseVerified={user.isCoinbaseVerified}
                   isOpBadgeholder={user.isOpBadgeholder}
